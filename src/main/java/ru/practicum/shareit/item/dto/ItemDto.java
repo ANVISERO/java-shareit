@@ -8,20 +8,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @Builder
 public class ItemDto {
-    @Null(groups = OnCreate.class, message = "Уникальный идентификатор задаётся автоматически")
+    @Null(groups = OnCreate.class, message = "Id of item must set automatically")
     private Integer id;
-    @NotBlank(groups = OnCreate.class, message = "Название вещи не может быть пустым")
+    @NotBlank(groups = OnCreate.class, message = "Name of item can't be empty")
     private String name;
-    @NotBlank(groups = OnCreate.class, message = "Описание вещи не может быть пустым")
+    @NotBlank(groups = OnCreate.class, message = "Description of item can't be empty")
     private String description;
-    @NotNull(groups = OnCreate.class, message = "Поле available не может быть пустым")
+    @NotNull(groups = OnCreate.class, message = "Availability of item can't be empty")
     private Boolean available;
     private Integer ownerId;
 }

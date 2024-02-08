@@ -15,10 +15,6 @@ import javax.validation.Valid;
 import javax.validation.groups.Default;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,38 +24,37 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Validated({OnCreate.class, Default.class}) @RequestBody UserDto userDto) {
-        log.debug("Получен Post запрос для создания нового пользователя {}", userDto);
+        log.debug("POST request received to create a new user {}", userDto);
         User user = UserMapper.userDtoToUser(userDto);
-        log.debug("Тело сообщения преобразовано в объект {}", user);
+        log.debug("The message body converted to an object {}", user);
         return userService.createUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        log.debug("Получен Get запрос для получения всех пользователей");
+        log.debug("GET request received to get all users");
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable(name = "userId") Integer userId) {
-        log.debug("Получен Get запрос для получения пользователя по его уникальному идентификатору");
+        log.debug("GET request received to get user by id = {}", userId);
         return userService.getUserById(userId);
     }
 
     @PatchMapping("/{userId}")
     public User updateUser(@PathVariable(name = "userId") Integer userId,
                            @Valid @RequestBody UserDto userDto) {
-        log.debug("Получен Patch запрос для обновления пользователя по его уникальному идентификатору id = {}", userId);
+        log.debug("PATCH request received to update user by id = {}", userId);
         User user = UserMapper.userDtoToUser(userDto);
-        log.debug("Тело сообщения преобразовано в объект {}", user);
+        log.debug("The message body converted to an object {}", user);
         return userService.updateUser(userId, user);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable(name = "userId") Integer userId) {
-        log.debug("Получен Delete запрос для удаления пользователя по его уникальному идентификатору");
+        log.debug("DELETE request received to delete user by id = {}", userId);
         userService.deleteUser(userId);
-        return ResponseEntity.ok(String.format("Пользователь с уникальным идентификатором id = %s успешно удалён",
-                userId));
+        return ResponseEntity.ok(String.format("User with id = %s successfully deleted", userId));
     }
 }

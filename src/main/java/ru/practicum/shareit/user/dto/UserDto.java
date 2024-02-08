@@ -11,11 +11,11 @@ import javax.validation.constraints.Null;
 @Data
 @Builder
 public class UserDto {
-    @Null(groups = OnCreate.class, message = "Уникальный идентификатор задаётся автоматически")
+    @Null(groups = OnCreate.class, message = "Id of user must set automatically")
     private Integer id;
-    @NotBlank(groups = OnCreate.class, message = "Имя пользователя не должно быть пустым")
+    @NotBlank(groups = OnCreate.class, message = "Name of user can't be empty")
     private String name;
-    @NotBlank(groups = OnCreate.class, message = "Email пользователя не должен быть пустым")
-    @Email(message = "Введён некорректный email пользователя")
+    @NotBlank(groups = OnCreate.class, message = "Email of user can't be empty")
+    @Email(message = "User's email is incorrect")
     private String email;
 }

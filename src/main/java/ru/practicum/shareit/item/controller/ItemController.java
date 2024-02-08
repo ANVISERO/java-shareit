@@ -12,10 +12,6 @@ import ru.practicum.shareit.validation.OnCreate;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Slf4j
 @Validated
 @RestController
@@ -27,38 +23,38 @@ public class ItemController {
     @PostMapping
     public Item createItem(@Validated({OnCreate.class}) @RequestBody ItemDto itemDto,
                            @RequestHeader("X-Sharer-User-Id") Integer userId) {
-        log.debug("Получен Post запрос для создания новой вещи {} пользователя с идентификатором id = {}",
+        log.debug("POST request received to create a new item {} of a user with id = {}",
                 itemDto, userId);
         Item item = ItemMapper.itemDtoToItem(itemDto);
-        log.debug("Тело сообщения преобразовано в объект {}", item);
+        log.debug("The message body converted to an object {}", item);
         return itemService.createItem(item, userId);
     }
 
     @GetMapping
     public List<Item> getAllItems(@RequestHeader("X-Sharer-User-Id") Integer userId) {
-        log.debug("Получен Get запрос для получения всех вещей пользователя с идентификатором id = {}", userId);
+        log.debug("GET request received to get all items of the user with id = {}", userId);
         return itemService.getAllItems(userId);
     }
 
     @GetMapping("/{itemId}")
     public Item getItemById(@PathVariable(name = "itemId") Integer itemId) {
-        log.debug("Получен Get запрос для получения вещи по её уникальному идентификатору id = {}", itemId);
+        log.debug("GET request received to get item by id = {}", itemId);
         return itemService.getItemById(itemId);
     }
 
     @PatchMapping("/{itemId}")
     public Item updateItem(@PathVariable(name = "itemId") Integer itemId, @RequestBody ItemDto itemDto,
                            @RequestHeader(value = "X-Sharer-User-Id") Integer ownerId) {
-        log.debug("Получен Patch запрос для обновления вещи по её уникальному идентификатору id = {} " +
-                "от пользователя с идентификатором id = {}", itemId, ownerId);
+        log.debug("PATCH request received to update item by id = {} " +
+                "from user with id = {}", itemId, ownerId);
         Item item = ItemMapper.itemDtoToItem(itemDto);
-        log.debug("Тело сообщения преобразовано в объект {}", item);
+        log.debug("The message body converted to an object {}", item);
         return itemService.updateItem(itemId, item, ownerId);
     }
 
     @GetMapping("/search")
     public List<Item> searchItem(@RequestParam("text") String text) {
-        log.debug("Получен Get запрос для поиска вещи по ключевому слову text = {}", text);
+        log.debug("GET request received to search items by text = {}", text);
         return itemService.searchItems(text);
     }
 }

@@ -8,18 +8,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @Builder
 public class User {
-    @Null(groups = OnCreate.class, message = "Уникальный идентификатор задаётся автоматически")
+    @Null(groups = OnCreate.class, message = "Id of user must set automatically")
     private Integer id;
-    @NotBlank(message = "Имя пользователя не должно быть пустым")
+    @NotBlank(groups = OnCreate.class, message = "Name of user can't be empty")
     private String name;
-    @NotBlank(message = "Email пользователя не должен быть пустым")
-    @Email(message = "Введён некорректный email пользователя")
+    @NotBlank(groups = OnCreate.class, message = "Email of user can't be empty")
+    @Email(message = "User's email is incorrect")
     private String email;
 }

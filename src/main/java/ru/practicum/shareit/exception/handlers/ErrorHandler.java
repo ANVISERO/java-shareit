@@ -18,21 +18,21 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException exception) {
-        log.warn("Искомый объект не найден. {}", exception.getMessage());
-        return new ErrorResponse("Искомый объект не найден", exception.getMessage());
+        log.warn("Object not found. {}", exception.getMessage());
+        return new ErrorResponse("Object not found", exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException exception) {
-        log.warn("Ошибка валидации. {}", exception.getMessage());
-        return new ErrorResponse("Ошибка валидации", exception.getMessage());
+        log.warn("Validation error. {}", exception.getMessage());
+        return new ErrorResponse("Validation error", exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleIncorrectDataException(final IncorrectDataException exception) {
-        log.warn("Переданы некорректные данные. {}", exception.getMessage());
-        return new ErrorResponse("Переданы некорректные данные", exception.getMessage());
+        log.warn("Incorrect parameters were transmitted. {}", exception.getMessage());
+        return new ErrorResponse("Incorrect parameters were transmitted", exception.getMessage());
     }
 }

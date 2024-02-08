@@ -19,7 +19,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item createItem(Item item, Integer userId) {
         userRepository.checkUserExists(userId);
-        log.debug("Пользователь с идентификатором id = {} найден", userId);
+        log.debug("User with id = {} not found", userId);
         item.setOwnerId(userId);
         return itemRepository.createItem(item);
     }
@@ -37,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItem(Integer itemId, Item item, Integer ownerId) {
         userRepository.checkUserExists(ownerId);
-        log.debug("Пользователь с идентификатором id = {} найден", ownerId);
+        log.debug("User with id = {} not found", ownerId);
         item.setId(itemId);
         item.setOwnerId(ownerId);
         return itemRepository.updateItem(item);
