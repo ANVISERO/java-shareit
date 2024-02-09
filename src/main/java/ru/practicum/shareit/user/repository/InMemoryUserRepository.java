@@ -11,9 +11,9 @@ import java.util.*;
 @Slf4j
 @Repository
 public class InMemoryUserRepository implements UserRepository {
-    private static final Map<Integer, User> users = new HashMap<>();
-    private static final Set<String> emails = new HashSet<>();
-    private static int userId = 0;
+    private final Map<Integer, User> users = new HashMap<>();
+    private final Set<String> emails = new HashSet<>();
+    private int userId = 0;
 
     @Override
     public User createUser(User user) {
@@ -78,7 +78,7 @@ public class InMemoryUserRepository implements UserRepository {
         log.debug("User with id = {} successfully deleted", userId);
     }
 
-    private static Integer generateUserId() {
+    private Integer generateUserId() {
         return ++userId;
     }
 
