@@ -1,21 +1,25 @@
 package ru.practicum.shareit.user.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.validation.OnCreate;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
+import javax.persistence.*;
 
 @Data
 @Builder
+@Entity
+@Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-    @Null(groups = OnCreate.class, message = "Id of user must set automatically")
-    private Integer id;
-    @NotBlank(groups = OnCreate.class, message = "Name of user can't be empty")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
-    @NotBlank(groups = OnCreate.class, message = "Email of user can't be empty")
-    @Email(message = "User's email is incorrect")
+    @Column(name = "email", nullable = false)
     private String email;
 }

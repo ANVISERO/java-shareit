@@ -1,23 +1,31 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.validation.OnCreate;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.user.model.User;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import javax.persistence.*;
 
 @Data
+@Entity
 @Builder
+@Table(name = "items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
-    @Null(groups = OnCreate.class, message = "Id must set automatically")
-    private Integer id;
-    @NotBlank(groups = OnCreate.class, message = "Name of item can't be empty")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
+    private Long id;
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
-    @NotBlank(groups = OnCreate.class, message = "Description of item can't be empty")
+    @Column(name = "description", nullable = false, length = 512)
     private String description;
-    @NotNull(groups = OnCreate.class, message = "Availability of item can't be empty")
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
-    private Integer ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", referencedColumnName = "user_id", nullable = false)
+    private User owner;
 }
