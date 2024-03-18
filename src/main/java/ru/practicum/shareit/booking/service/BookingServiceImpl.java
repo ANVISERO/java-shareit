@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
                     String.format("User with id %d not found", ownerId));
         });
         log.debug("User with id = {} found", ownerId);
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
+        Booking booking = bookingRepository.findByIdWithUserAndItem(bookingId).orElseThrow(() -> {
             log.warn("Booking with id {} not found", bookingId);
             return new NotFoundException(
                     String.format("Booking with id %d not found", bookingId));
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
                     String.format("User with id %d not found", userId));
         });
         log.debug("User with id = {} found", userId);
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
+        Booking booking = bookingRepository.findByIdWithUserAndItem(bookingId).orElseThrow(() -> {
             log.warn("Booking with id {} not found", bookingId);
             return new NotFoundException(
                     String.format("Booking with id %d not found", bookingId));
@@ -125,20 +125,18 @@ public class BookingServiceImpl implements BookingService {
         });
         log.debug("User with id = {} found", userId);
         List<Booking> bookings;
-        LocalDateTime now = LocalDateTime.now();
         switch (bookingStatus) {
             case ALL:
                 bookings = bookingRepository.findAllByBookerIdOrderByStartDesc(user.getId());
                 break;
             case CURRENT:
-                bookings = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(user.getId(),
-                        now, now);
+                bookings = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(user.getId());
                 break;
             case PAST:
-                bookings = bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(user.getId(), now);
+                bookings = bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(user.getId());
                 break;
             case FUTURE:
-                bookings = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(user.getId(), now);
+                bookings = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(user.getId());
                 break;
             case WAITING:
             case REJECTED:
@@ -170,17 +168,19 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findAllByItemOwnerOrderByStartDesc(owner);
                 break;
             case CURRENT:
-                bookings = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(owner.getId(), now, now);
+                bookings = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(
+                        owner.getId());
                 break;
             case PAST:
-                bookings = bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(owner.getId(), now);
+                bookings = bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(owner.getId());
                 break;
             case FUTURE:
-                bookings = bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(owner.getId(), now);
+                bookings = bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(owner.getId());
                 break;
             case WAITING:
             case REJECTED:
-                bookings = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(owner.getId(), bookingStatus);
+                bookings = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(owner.getId(),
+                        bookingStatus);
                 break;
             default:
                 log.warn("Received incorrect booking status = {} from user with id = {}", bookingStatus, owner.getId());

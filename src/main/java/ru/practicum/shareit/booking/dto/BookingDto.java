@@ -20,10 +20,10 @@ public class BookingDto {
     private Long id;
     private BookingStatus status;
     @NotNull(groups = OnCreate.class, message = "Booking start time can't be empty")
-    @Future
+    @Future(message = "You can't book a date in the past")
     private LocalDateTime start;
     @NotNull(groups = OnCreate.class, message = "Booking end time can't be empty")
-    @Future
+    @Future(message = "You can't book a date in the past")
     private LocalDateTime end;
     @Positive
     private Long itemId;

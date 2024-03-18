@@ -9,7 +9,7 @@ import ru.practicum.shareit.exception.IllegalBookingStatusException;
 public class StringToBookingStatusConverter implements Converter<String, BookingStatus> {
     @Override
     public BookingStatus convert(String source) {
-        log.warn("converter {}", source);
+        log.debug("converter {}", source);
         BookingStatus bookingStatus;
         try {
             bookingStatus = BookingStatus.valueOf(source.toUpperCase());

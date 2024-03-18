@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public List<ItemDto> getAllUserItems(Long userId) {
-        User owner = userRepository.findById(userId).orElseThrow(() -> {
+        userRepository.findById(userId).orElseThrow(() -> {
             log.warn("User with id {} not found", userId);
             return new NotFoundException(String.format("User with id %d not found", userId));
         });
