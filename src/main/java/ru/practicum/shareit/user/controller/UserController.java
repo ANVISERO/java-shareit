@@ -6,12 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.util.mapper.UserMapper;
 import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import javax.validation.groups.Default;
 import java.util.List;
 
@@ -37,13 +38,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable(name = "userId") Integer userId) {
+    public User getUserById(@PathVariable(name = "userId") @Positive Long userId) {
         log.debug("GET request received to get user by id = {}", userId);
         return userService.getUserById(userId);
     }
 
     @PatchMapping("/{userId}")
-    public User updateUser(@PathVariable(name = "userId") Integer userId,
+    public User updateUser(@PathVariable(name = "userId") @Positive Long userId,
                            @Valid @RequestBody UserDto userDto) {
         log.debug("PATCH request received to update user by id = {}", userId);
         User user = UserMapper.userDtoToUser(userDto);
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable(name = "userId") Integer userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "userId") @Positive Long userId) {
         log.debug("DELETE request received to delete user by id = {}", userId);
         userService.deleteUser(userId);
         return ResponseEntity.ok(String.format("User with id = %s successfully deleted", userId));
