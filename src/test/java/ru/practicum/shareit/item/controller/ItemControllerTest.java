@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -53,16 +52,9 @@ public class ItemControllerTest {
     ItemRequest itemRequest1;
     Item item1;
     ItemDto itemDto1;
-    Booking booking1;
-    Booking booking2;
-    Booking bookingNotLast1;
-    Booking bookingNotNext1;
     ItemInfoDto.BookingDto itemInfoDtoBookingDto1;
     ItemInfoDto.BookingDto itemInfoDtoBookingDto2;
-    ItemInfoDto.BookingDto itemInfoDtoBookingDtoNotLast1;
-    ItemInfoDto.BookingDto itemInfoDtoBookingDtoNotNext1;
     Comment comment1;
-    Comment comment2;
     CommentDto commentDto1;
     CommentDto commentDto2;
     ItemInfoDto itemInfoDto1;
@@ -79,29 +71,13 @@ public class ItemControllerTest {
         itemDto1 = ItemDto.builder().name("item1").description("description1")
                 .available(Boolean.TRUE).requestId(itemRequest1.getId()).build();
         LocalDateTime start1 = LocalDateTime.now();
-        booking1 = Booking.builder().id(1L).status(BookingStatus.PAST).start(start1.minusDays(2))
-                .end(start1.minusDays(1)).booker(user2).item(item1).build();
-        booking2 = Booking.builder().id(2L).status(BookingStatus.FUTURE).start(start1.plusDays(1))
-                .end(start1.plusDays(2)).booker(user2).item(item1).build();
-        bookingNotLast1 = Booking.builder().id(11L).status(BookingStatus.PAST).start(start1.minusDays(5))
-                .end(start1.minusDays(4)).booker(user2).item(item1).build();
-        bookingNotNext1 = Booking.builder().id(12L).status(BookingStatus.FUTURE).start(start1.plusDays(4))
-                .end(start1.plusDays(5)).booker(user2).item(item1).build();
         itemInfoDtoBookingDto1 = ItemInfoDto.BookingDto.builder().id(1L).status(BookingStatus.PAST)
                 .start(start1.minusDays(2)).end(start1.minusDays(1)).bookerId(user2.getId()).itemId(item1.getId())
                 .build();
         itemInfoDtoBookingDto2 = ItemInfoDto.BookingDto.builder().id(2L).status(BookingStatus.PAST)
                 .start(start1.plusDays(1)).end(start1.plusDays(2)).bookerId(user2.getId()).itemId(item1.getId())
                 .build();
-        itemInfoDtoBookingDtoNotLast1 = ItemInfoDto.BookingDto.builder().id(11L).status(BookingStatus.PAST)
-                .start(start1.minusDays(5)).end(start1.minusDays(4)).bookerId(user2.getId()).itemId(item1.getId())
-                .build();
-        itemInfoDtoBookingDtoNotNext1 = ItemInfoDto.BookingDto.builder().id(12L).status(BookingStatus.PAST)
-                .start(start1.plusDays(4)).end(start1.plusDays(5)).bookerId(user2.getId()).itemId(item1.getId())
-                .build();
         comment1 = Comment.builder().id(1L).text("comment1").item(item1).author(user2).created(start1.plusDays(5))
-                .build();
-        comment2 = Comment.builder().id(2L).text("comment2").item(item1).author(user2).created(start1.plusDays(7))
                 .build();
         commentDto1 = CommentDto.builder().text("comment1").created(start1.plusDays(5))
                 .authorName(user2.getName()).build();

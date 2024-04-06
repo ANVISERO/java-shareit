@@ -2,6 +2,7 @@ package ru.practicum.shareit.validation;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
@@ -14,6 +15,7 @@ public class BookingTimeValidatorTest {
 
     private BookingTimeValidator bookingTimeValidator;
     private BookingDto booking;
+    LocalDateTime now = LocalDateTime.now();
 
     @BeforeEach
     public void setUp() {
@@ -22,9 +24,10 @@ public class BookingTimeValidatorTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenStartIsBeforeEnd() {
-        booking.setStart(LocalDateTime.of(2024, 4, 6, 10, 0));
-        booking.setEnd(LocalDateTime.of(2024, 4, 6, 12, 0));
+    @DisplayName("isValid_whenStartIsBeforeEnd_thenTrueReturned")
+    public void isValid_whenStartIsBeforeEnd_thenTrueReturned() {
+        booking.setStart(now);
+        booking.setEnd(now.plusDays(1));
 
         boolean isValid = bookingTimeValidator.isValid(booking, null);
 
@@ -32,9 +35,10 @@ public class BookingTimeValidatorTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenStartIsAfterEnd() {
-        booking.setStart(LocalDateTime.of(2024, 4, 6, 12, 0));
-        booking.setEnd(LocalDateTime.of(2024, 4, 6, 10, 0));
+    @DisplayName("isValid_whenStartIsAfterEnd_thenFalseReturned")
+    public void isValid_whenStartIsAfterEnd_thenFalseReturned() {
+        booking.setStart(now.plusDays(1));
+        booking.setEnd(now);
 
         boolean isValid = bookingTimeValidator.isValid(booking, null);
 
@@ -42,9 +46,21 @@ public class BookingTimeValidatorTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenStartOrEndIsNull() {
+    @DisplayName("isValid_whenStartIsNull_thenFalseReturned")
+    public void isValid_whenStartIsNull_thenFalseReturned() {
         booking.setStart(null);
-        booking.setEnd(LocalDateTime.of(2024, 4, 6, 12, 0));
+        booking.setEnd(now);
+
+        boolean isValid = bookingTimeValidator.isValid(booking, null);
+
+        assertFalse(isValid);
+    }
+
+    @Test
+    @DisplayName("isValid_whenEndIsNull_thenFalseReturned")
+    public void isValid_whenEndIsNull_thenFalseReturned() {
+        booking.setStart(now);
+        booking.setEnd(null);
 
         boolean isValid = bookingTimeValidator.isValid(booking, null);
 

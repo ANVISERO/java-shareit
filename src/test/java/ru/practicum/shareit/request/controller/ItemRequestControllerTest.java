@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestInfoDto;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -43,40 +42,25 @@ public class ItemRequestControllerTest {
     @MockBean
     private ItemRequestMapper itemRequestMapper;
     private User user1;
-    private User user2;
     private ItemRequest itemRequest1;
-    private ItemRequest itemRequest2;
     private ItemRequestDto itemRequestDto1;
-    private ItemRequestDto itemRequestDto2;
     private ItemRequestInfoDto itemRequestInfoDto1;
     private ItemRequestInfoDto itemRequestInfoDto2;
-    private Item item1;
-    private Item item2;
     private ItemRequestInfoDto.ItemDto itemFromItemRequestInfoDto1;
     private ItemRequestInfoDto.ItemDto itemFromItemRequestInfoDto2;
 
     @BeforeEach
     void setUp() {
         user1 = User.builder().id(1L).name("user1").email("user1@post.com").build();
-        user2 = User.builder().id(2L).name("user2").email("user2@post.com").build();
         LocalDateTime created1 = LocalDateTime.now();
-        LocalDateTime created2 = LocalDateTime.now();
         itemRequest1 = ItemRequest.builder().description("itemRequestDescription1")
                 .created(created1).requestor(user1).build();
-        itemRequest2 = ItemRequest.builder().description("itemRequestDescription2")
-                .created(created2).requestor(user1).build();
         itemRequestDto1 = ItemRequestDto.builder().description("itemRequestDescription2")
                 .created(created1).build();
-        itemRequestDto2 = ItemRequestDto.builder().description("itemRequestDescription2")
-                .created(created2).build();
         itemRequestInfoDto1 = ItemRequestInfoDto.builder().id(1L).description("itemRequestDescription1")
                 .created(created1).build();
         itemRequestInfoDto2 = ItemRequestInfoDto.builder().id(2L).description("itemRequestDescription2")
                 .created(created1).build();
-        item1 = Item.builder().id(1L).name("item1").description("itemDescription1")
-                .available(Boolean.TRUE).owner(user2).itemRequest(itemRequest1).build();
-        item2 = Item.builder().id(2L).name("item2").description("itemDescription2")
-                .available(Boolean.TRUE).owner(user2).itemRequest(itemRequest1).build();
         itemFromItemRequestInfoDto1 = ItemRequestInfoDto.ItemDto.builder().id(1L).name("item1")
                 .description("itemDescription1").available(Boolean.TRUE).requestId(itemRequest1.getId()).build();
         itemFromItemRequestInfoDto2 = ItemRequestInfoDto.ItemDto.builder().id(2L).name("item2")
