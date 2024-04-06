@@ -1,13 +1,19 @@
 package ru.practicum.shareit.booking.util.mapper;
 
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.util.mapper.ItemMapper;
 import ru.practicum.shareit.user.util.mapper.UserMapper;
 
-@UtilityClass
+@Component
+@RequiredArgsConstructor
 public class BookingMapper {
+    private final UserMapper userMapper;
+    private final ItemMapper itemMapper;
+
     public Booking bookingDtoToBooking(BookingDto bookingDto) {
         return Booking.builder()
                 .id(bookingDto.getId())
@@ -23,14 +29,14 @@ public class BookingMapper {
                 .status(booking.getStatus())
                 .start(booking.getStart())
                 .end(booking.getEnd())
-                .booker(UserMapper.userToUserDto(booking.getBooker()))
-                .item(ItemMapper.itemToItemDto(booking.getItem()))
+                .booker(userMapper.userToUserDto(booking.getBooker()))
+                .item(itemMapper.itemToItemDto(booking.getItem()))
                 .build();
     }
 
 
-    public BookingDto bookingToBookingDtoWithoutUserAndItem(Booking booking) {
-        return BookingDto.builder()
+    public ItemInfoDto.BookingDto bookingToItemInfoDtoBookingDto(Booking booking) {
+        return ItemInfoDto.BookingDto.builder()
                 .id(booking.getId())
                 .status(booking.getStatus())
                 .start(booking.getStart())

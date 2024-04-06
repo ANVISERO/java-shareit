@@ -1,5 +1,8 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,81 +14,62 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
             "WHERE b.id = :bookingId")
     Optional<Booking> findByIdWithUserAndItem(Long bookingId);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.booker.id = :userId " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByBookerIdOrderByStartDesc(Long userId);
+            "WHERE b.booker.id = :userId")
+    Page<Booking> findAllByBookerIdOrderByStartDesc(Long userId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.booker.id = :bookerId AND b.start < CURRENT_TIMESTAMP AND b.end > CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId);
+            "WHERE b.booker.id = :bookerId AND b.start < CURRENT_TIMESTAMP AND b.end > CURRENT_TIMESTAMP")
+    Page<Booking> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.booker.id = :bookerId AND b.end < CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByBookerIdAndEndBeforeOrderByStartDesc(Long bookerId);
+            "WHERE b.booker.id = :bookerId AND b.end < CURRENT_TIMESTAMP")
+    Page<Booking> findAllByBookerIdAndEndBeforeOrderByStartDesc(Long bookerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.booker.id = :bookerId AND b.start > CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long bookerId);
+            "WHERE b.booker.id = :bookerId AND b.start > CURRENT_TIMESTAMP")
+    Page<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long bookerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.booker.id = :bookerId AND b.status = :bookingStatus " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByBookerIdAndStatusOrderByStartDesc(Long bookerId, BookingStatus bookingStatus);
+            "WHERE b.booker.id = :bookerId AND b.status = :bookingStatus")
+    Page<Booking> findAllByBookerIdAndStatusOrderByStartDesc(Long bookerId, BookingStatus bookingStatus,
+                                                             Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.item.owner = :owner " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByItemOwnerOrderByStartDesc(User owner);
+            "WHERE b.item.owner = :owner")
+    Page<Booking> findAllByItemOwnerOrderByStartDesc(User owner, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.item.owner.id = :ownerId AND b.start < CURRENT_TIMESTAMP AND b.end > CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long ownerId);
+            "WHERE b.item.owner.id = :ownerId AND b.start < CURRENT_TIMESTAMP AND b.end > CURRENT_TIMESTAMP")
+    Page<Booking> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long ownerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.item.owner.id = :ownerId AND b.end < CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(Long ownerId);
+            "WHERE b.item.owner.id = :ownerId AND b.end < CURRENT_TIMESTAMP")
+    Page<Booking> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(Long ownerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.item.owner.id = :ownerId AND b.start > CURRENT_TIMESTAMP " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Long ownerId);
+            "WHERE b.item.owner.id = :ownerId AND b.start > CURRENT_TIMESTAMP")
+    Page<Booking> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Long ownerId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
-            "JOIN FETCH b.booker " +
-            "JOIN FETCH b.item " +
-            "WHERE b.item.owner.id = :ownerId AND b.status = :bookingStatus " +
-            "ORDER BY b.start DESC")
-    List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus bookingStatus);
+            "WHERE b.item.owner.id = :ownerId AND b.status = :bookingStatus")
+    Page<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus bookingStatus,
+                                                                Pageable pageable);
 
     @Query("SELECT b FROM Booking AS b " +
             "JOIN FETCH b.item " +

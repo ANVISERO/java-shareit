@@ -22,32 +22,33 @@ import java.util.List;
 @RequestMapping(path = "/users")
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping
-    public User createUser(@Validated({OnCreate.class, Default.class}) @RequestBody UserDto userDto) {
+    public UserDto createUser(@Validated({OnCreate.class, Default.class}) @RequestBody UserDto userDto) {
         log.debug("POST request received to create a new user {}", userDto);
-        User user = UserMapper.userDtoToUser(userDto);
+        User user = userMapper.userDtoToUser(userDto);
         log.debug("The message body converted to an object {}", user);
         return userService.createUser(user);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.debug("GET request received to get all users");
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable(name = "userId") @Positive Long userId) {
+    public UserDto getUserById(@PathVariable(name = "userId") @Positive Long userId) {
         log.debug("GET request received to get user by id = {}", userId);
         return userService.getUserById(userId);
     }
 
     @PatchMapping("/{userId}")
-    public User updateUser(@PathVariable(name = "userId") @Positive Long userId,
+    public UserDto updateUser(@PathVariable(name = "userId") @Positive Long userId,
                            @Valid @RequestBody UserDto userDto) {
         log.debug("PATCH request received to update user by id = {}", userId);
-        User user = UserMapper.userDtoToUser(userDto);
+        User user = userMapper.userDtoToUser(userDto);
         log.debug("The message body converted to an object {}", user);
         return userService.updateUser(userId, user);
     }

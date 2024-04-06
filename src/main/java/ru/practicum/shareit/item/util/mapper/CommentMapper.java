@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item.util.mapper;
 
-import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
-@UtilityClass
+@Component
 public class CommentMapper {
     public Comment commentDtoToComment(CommentDto commentDto) {
         return Comment.builder()
@@ -19,7 +19,7 @@ public class CommentMapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .created(comment.getCreated())
-                .authorName(comment.getAuthor().getName())
+                .authorName(comment.getAuthor() == null ? null : comment.getAuthor().getName())
                 .build();
     }
 }

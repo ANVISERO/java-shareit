@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllCommentsByItemId(Long itemId);
 
     @Query("SELECT c FROM Comment AS c " +
-            "JOIN FETCH c.author " +
-            "WHERE c.author.id = :authorId")
-    List<Comment> findAllCommentsByAuthorId(@Param("authorId") Long userId);
+            "JOIN FETCH c.item " +
+            "WHERE c.item.owner.id = :ownerId")
+    List<Comment> findAllCommentsLeftOnOwnerItemsWithId(@Param("ownerId") Long userId);
 }

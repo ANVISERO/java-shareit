@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.util.mapper.BookingMapper;
 import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.Default;
 import java.util.List;
 
@@ -22,13 +23,14 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 public class BookingController {
     private final BookingService bookingService;
+    private final BookingMapper bookingMapper;
 
     @PostMapping
     public BookingDto createBooking(@Validated({OnCreate.class, Default.class}) @RequestBody BookingDto bookingDto,
                                     @Positive @RequestHeader("X-Sharer-User-Id") Long bookerId) {
         log.debug("POST request received to create a new booking {} of the item with id = {} by user with id = {}",
                 bookingDto, bookingDto.getItemId(), bookerId);
-        Booking booking = BookingMapper.bookingDtoToBooking(bookingDto);
+        Booking booking = bookingMapper.bookingDtoToBooking(bookingDto);
         log.debug("The message body converted to an object {}", booking);
         return bookingService.createBooking(booking, bookerId, bookingDto.getItemId());
     }
@@ -50,20 +52,24 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> getAllUserBookingsByStatus(@RequestParam(name = "state", required = false,
-            defaultValue = "ALL") BookingStatus bookingStatus, @RequestHeader(value = "X-Sharer-User-Id")
-                                                       @Positive Long userId) {
+    public List<BookingDto> getAllUserBookingsByStatus(
+            @RequestParam(name = "state", required = false, defaultValue = "ALL") BookingStatus bookingStatus,
+            @RequestHeader(value = "X-Sharer-User-Id") @Positive Long userId,
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
         log.debug("GET request received to get all bookings by user with id = {} and with state = {}", userId,
                 bookingStatus);
-        return bookingService.getAllUserBookingsByStatus(bookingStatus, userId);
+        return bookingService.getAllUserBookingsByStatus(bookingStatus, userId, from, size);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> getAllOwnerItemsBookingsByStatus(@RequestParam(name = "state", required = false,
-            defaultValue = "ALL") BookingStatus bookingStatus, @RequestHeader(value = "X-Sharer-User-Id")
-                                                             @Positive Long ownerId) {
+    public List<BookingDto> getAllOwnerItemsBookingsByStatus(
+            @RequestParam(name = "state", required = false, defaultValue = "ALL") BookingStatus bookingStatus,
+            @RequestHeader(value = "X-Sharer-User-Id") @Positive Long ownerId,
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
         log.debug("GET request received to get all bookings by owner with id = {} and with state = {}", ownerId,
                 bookingStatus);
-        return bookingService.getAllOwnerItemsBookingsByStatus(bookingStatus, ownerId);
+        return bookingService.getAllOwnerItemsBookingsByStatus(bookingStatus, ownerId, from, size);
     }
 }
