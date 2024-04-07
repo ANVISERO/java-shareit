@@ -15,14 +15,10 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     @EntityGraph(attributePaths = {"booker", "item"})
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.id = :bookingId")
-    Optional<Booking> findByIdWithUserAndItem(Long bookingId);
+    Optional<Booking> findById(Long bookingId);
 
     @EntityGraph(attributePaths = {"booker", "item"})
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.booker.id = :userId")
-    Page<Booking> findAllByBookerIdOrderByStartDesc(Long userId, Pageable pageable);
+    Page<Booking> findByBookerId(Long userId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"booker", "item"})
     @Query("SELECT b FROM Booking AS b " +
@@ -40,14 +36,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Page<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long bookerId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"booker", "item"})
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.booker.id = :bookerId AND b.status = :bookingStatus")
     Page<Booking> findAllByBookerIdAndStatusOrderByStartDesc(Long bookerId, BookingStatus bookingStatus,
                                                              Pageable pageable);
 
     @EntityGraph(attributePaths = {"booker", "item"})
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner = :owner")
     Page<Booking> findAllByItemOwnerOrderByStartDesc(User owner, Pageable pageable);
 
     @EntityGraph(attributePaths = {"booker", "item"})
@@ -66,8 +58,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Page<Booking> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Long ownerId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"booker", "item"})
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :ownerId AND b.status = :bookingStatus")
     Page<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus bookingStatus,
                                                                 Pageable pageable);
 

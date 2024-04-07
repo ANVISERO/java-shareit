@@ -67,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
             return new NotFoundException(String.format("User with id = %d not found", ownerId));
         });
         log.debug("User with id = {} found", ownerId);
-        Booking booking = bookingRepository.findByIdWithUserAndItem(bookingId).orElseThrow(() -> {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
             log.warn("Booking with id = {} not found", bookingId);
             return new NotFoundException(String.format("Booking with id = %d not found", bookingId));
         });
@@ -96,7 +96,7 @@ public class BookingServiceImpl implements BookingService {
             return new NotFoundException(String.format("User with id = %d not found", userId));
         });
         log.debug("User with id = {} found", userId);
-        Booking booking = bookingRepository.findByIdWithUserAndItem(bookingId).orElseThrow(() -> {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> {
             log.warn("Booking with id = {} not found", bookingId);
             return new NotFoundException(String.format("Booking with id = %d not found", bookingId));
         });
@@ -123,7 +123,7 @@ public class BookingServiceImpl implements BookingService {
         Page<Booking> bookingsPage;
         switch (bookingStatus) {
             case ALL:
-                bookingsPage = bookingRepository.findAllByBookerIdOrderByStartDesc(user.getId(), pageRequest);
+                bookingsPage = bookingRepository.findByBookerId(user.getId(), pageRequest);
                 break;
             case CURRENT:
                 bookingsPage = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(

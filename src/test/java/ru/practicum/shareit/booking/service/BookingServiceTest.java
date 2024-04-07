@@ -219,7 +219,7 @@ public class BookingServiceTest {
         bookingDto1.setStatus(BookingStatus.APPROVED);
         BookingDto bookingDtoCheck = bookingDto1.toBuilder().build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingToSave);
         when(bookingMapper.bookingToBookingDto(any(Booking.class))).thenReturn(bookingDto1);
 
@@ -228,7 +228,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDto);
         assertEquals(bookingDtoCheck, bookingDto);
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, times(1)).save(any(Booking.class));
         verify(bookingMapper, times(1)).bookingToBookingDto(any(Booking.class));
     }
@@ -241,7 +241,7 @@ public class BookingServiceTest {
         bookingDto1.setStatus(BookingStatus.REJECTED);
         BookingDto bookingDtoCheck = bookingDto1.toBuilder().build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingToSave);
         when(bookingMapper.bookingToBookingDto(any(Booking.class))).thenReturn(bookingDto1);
 
@@ -250,7 +250,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDto);
         assertEquals(bookingDtoCheck, bookingDto);
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, times(1)).save(any(Booking.class));
         verify(bookingMapper, times(1)).bookingToBookingDto(any(Booking.class));
     }
@@ -261,14 +261,14 @@ public class BookingServiceTest {
         booking1.setStatus(BookingStatus.APPROVED);
         bookingDto1.setStatus(BookingStatus.APPROVED);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
 
         ChangeStatusException exception = assertThrows(ChangeStatusException.class, () ->
                 bookingService.changeBookingStatus(booking1.getId(), Boolean.TRUE, user1.getId()));
 
         assertEquals("Booking status with id = 1 already approved", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, never()).save(any(Booking.class));
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
@@ -279,14 +279,14 @@ public class BookingServiceTest {
         booking1.setStatus(BookingStatus.APPROVED);
         bookingDto1.setStatus(BookingStatus.APPROVED);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
 
         ChangeStatusException exception = assertThrows(ChangeStatusException.class, () ->
                 bookingService.changeBookingStatus(booking1.getId(), Boolean.FALSE, user1.getId()));
 
         assertEquals("Booking status with id = 1 already approved", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, never()).save(any(Booking.class));
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
@@ -297,7 +297,7 @@ public class BookingServiceTest {
         booking1.setStatus(BookingStatus.WAITING);
         bookingDto1.setStatus(BookingStatus.WAITING);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user2));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
 
         PermissionException exception = assertThrows(PermissionException.class, () ->
                 bookingService.changeBookingStatus(booking1.getId(), Boolean.TRUE, user2.getId()));
@@ -305,7 +305,7 @@ public class BookingServiceTest {
         assertEquals("User with id = 2 has no permission to change status of booking with id = 1",
                 exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, never()).save(any(Booking.class));
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
@@ -314,14 +314,14 @@ public class BookingServiceTest {
     @DisplayName("changeBookingStatus_whenBookingNotFound_theNotFoundExceptionThrown")
     void changeBookingStatus_whenBookingNotFound_theNotFoundExceptionThrown() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user2));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.empty());
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 bookingService.changeBookingStatus(999L, Boolean.TRUE, user2.getId()));
 
         assertEquals("Booking with id = 999 not found", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingRepository, never()).save(any(Booking.class));
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
@@ -336,7 +336,7 @@ public class BookingServiceTest {
 
         assertEquals("User with id = 999 not found", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, never()).findById(anyLong());
         verify(bookingRepository, never()).save(any(Booking.class));
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
@@ -346,7 +346,7 @@ public class BookingServiceTest {
     void getBookingById_whenInvokedByOwner_thenBookingDtoReturned() {
         BookingDto bookingDtoCheck = bookingDto1.toBuilder().build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
         when(bookingMapper.bookingToBookingDto(any(Booking.class))).thenReturn(bookingDto1);
 
         BookingDto bookingDto = bookingService.getBookingById(booking1.getId(), user1.getId());
@@ -354,7 +354,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDto);
         assertEquals(bookingDtoCheck, bookingDto);
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingMapper, times(1)).bookingToBookingDto(any(Booking.class));
     }
 
@@ -363,7 +363,7 @@ public class BookingServiceTest {
     void getBookingById_whenInvokedByBooker_thenBookingDtoReturned() {
         BookingDto bookingDtoCheck = bookingDto1.toBuilder().build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user2));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
         when(bookingMapper.bookingToBookingDto(any(Booking.class))).thenReturn(bookingDto1);
 
         BookingDto bookingDto = bookingService.getBookingById(booking1.getId(), user2.getId());
@@ -371,7 +371,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDto);
         assertEquals(bookingDtoCheck, bookingDto);
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingMapper, times(1)).bookingToBookingDto(any(Booking.class));
     }
 
@@ -380,7 +380,7 @@ public class BookingServiceTest {
     void getBookingById_whenInvokedBySimpleUser_thenPermissionExceptionThrown() {
         User user3 = User.builder().id(3L).name("user3").email("user3@post.com").build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user3));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.of(booking1));
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking1));
 
         PermissionException exception = assertThrows(PermissionException.class, () ->
                 bookingService.getBookingById(booking1.getId(), user3.getId()));
@@ -388,7 +388,7 @@ public class BookingServiceTest {
         assertEquals("User with id = 3 has no permission to see data about booking with id = 1",
                 exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
 
@@ -396,14 +396,14 @@ public class BookingServiceTest {
     @DisplayName("getBookingById_whenBookingNotFound_thenNotFoundExceptionThrown")
     void getBookingById_whenBookingNotFound_thenNotFoundExceptionThrown() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(bookingRepository.findByIdWithUserAndItem(anyLong())).thenReturn(Optional.empty());
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 bookingService.getBookingById(999L, user1.getId()));
 
         assertEquals("Booking with id = 999 not found", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, times(1)).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, times(1)).findById(anyLong());
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
 
@@ -417,7 +417,7 @@ public class BookingServiceTest {
 
         assertEquals("User with id = 999 not found", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findByIdWithUserAndItem(anyLong());
+        verify(bookingRepository, never()).findById(anyLong());
         verify(bookingMapper, never()).bookingToBookingDto(any(Booking.class));
     }
 
@@ -456,7 +456,7 @@ public class BookingServiceTest {
         BookingDto bookingDtoCheck4 = bookingDto4.toBuilder().build();
         BookingDto bookingDtoCheck5 = bookingDto5.toBuilder().build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user2));
-        when(bookingRepository.findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class)))
+        when(bookingRepository.findByBookerId(anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(bookings));
         when(bookingMapper.bookingToBookingDto(any(Booking.class))).thenAnswer((invocationOnMock) -> {
             Booking booking = invocationOnMock.getArgument(0);
@@ -487,7 +487,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck2, bookingDtos.get(4));
         verify(userRepository, times(1)).findById(anyLong());
         verify(bookingRepository, times(1))
-                .findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+                .findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -543,7 +543,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck1, bookingDtos.get(0));
         assertEquals(bookingDtoCheck2, bookingDtos.get(1));
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, times(1))
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -596,7 +596,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck2, bookingDtos.get(0));
         assertEquals(bookingDtoCheck1, bookingDtos.get(1));
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, times(1))
@@ -649,7 +649,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck2, bookingDtos.get(0));
         assertEquals(bookingDtoCheck1, bookingDtos.get(1));
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -703,7 +703,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck2, bookingDtos.get(0));
         assertEquals(bookingDtoCheck1, bookingDtos.get(1));
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -757,7 +757,7 @@ public class BookingServiceTest {
         assertEquals(bookingDtoCheck2, bookingDtos.get(0));
         assertEquals(bookingDtoCheck1, bookingDtos.get(1));
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -794,7 +794,7 @@ public class BookingServiceTest {
         assertEquals("Received incorrect booking status = CANCELED from user with id = 2",
                 exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -816,7 +816,7 @@ public class BookingServiceTest {
 
         assertEquals("User with id = 999 not found", exception.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -832,7 +832,7 @@ public class BookingServiceTest {
     @DisplayName("getAllUserBookingsByStatus_whenBookingsWithStatusAllNotFound_thenEmptyListReturned")
     void getAllUserBookingsByStatus_whenBookingsWithStatusAllNotFound_thenEmptyListReturned() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user2));
-        when(bookingRepository.findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class)))
+        when(bookingRepository.findByBookerId(anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(Collections.emptyList()));
 
         List<BookingDto> bookingDtos = bookingService.getAllUserBookingsByStatus(BookingStatus.ALL, user2.getId(),
@@ -842,7 +842,7 @@ public class BookingServiceTest {
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
         verify(bookingRepository, times(1))
-                .findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+                .findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -867,7 +867,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDtos);
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, times(1))
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -892,7 +892,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDtos);
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, times(1))
@@ -917,7 +917,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDtos);
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -942,7 +942,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDtos);
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
@@ -967,7 +967,7 @@ public class BookingServiceTest {
         assertNotNull(bookingDtos);
         assertTrue(bookingDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(bookingRepository, never()).findAllByBookerIdOrderByStartDesc(anyLong(), any(Pageable.class));
+        verify(bookingRepository, never()).findByBookerId(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(Pageable.class));
         verify(bookingRepository, never())

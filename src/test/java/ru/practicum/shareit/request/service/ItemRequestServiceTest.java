@@ -333,7 +333,7 @@ public class ItemRequestServiceTest {
                 .id(itemRequestInfoDto7.getId()).description(itemRequestInfoDto7.getDescription())
                 .created(itemRequestInfoDto7.getCreated()).items(List.of(itemFromItemRequestInfoDto9)).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(itemRequestRepository.findAllWithoutRequestor(anyLong(), any(Pageable.class)))
+        when(itemRequestRepository.findByRequestorIdNot(anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(pageItemRequests));
         when(itemRepository.findAllByItemRequestIn(anyList())).thenReturn(pageRequests);
         when(itemRequestMapper.itemRequestToItemRequestInfoDto(any(ItemRequest.class)))
@@ -385,7 +385,7 @@ public class ItemRequestServiceTest {
         assertEquals(itemRequestInfoDtoWithRResponses7, itemRequestInfoDtos.get(3));
         verify(userRepository, times(1)).findById(anyLong());
         verify(itemRequestRepository, times(1))
-                .findAllWithoutRequestor(anyLong(), any(Pageable.class));
+                .findByRequestorIdNot(anyLong(), any(Pageable.class));
         verify(itemRepository, times(1)).findAllByItemRequestIn(anyList());
         verify(itemRequestMapper, times(4))
                 .itemRequestToItemRequestInfoDto(any(ItemRequest.class));
@@ -430,7 +430,7 @@ public class ItemRequestServiceTest {
                 .id(itemRequestInfoDto7.getId()).description(itemRequestInfoDto7.getDescription())
                 .created(itemRequestInfoDto7.getCreated()).items(Collections.emptyList()).build();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(itemRequestRepository.findAllWithoutRequestor(anyLong(), any(Pageable.class)))
+        when(itemRequestRepository.findByRequestorIdNot(anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(pageItemRequests));
         when(itemRepository.findAllByItemRequestIn(anyList())).thenReturn(Collections.emptyList());
         when(itemRequestMapper.itemRequestToItemRequestInfoDto(any(ItemRequest.class)))
@@ -468,7 +468,7 @@ public class ItemRequestServiceTest {
         assertEquals(itemRequestInfoDtoWithRResponses7, itemRequestInfoDtos.get(3));
         verify(userRepository, times(1)).findById(anyLong());
         verify(itemRequestRepository, times(1))
-                .findAllWithoutRequestor(anyLong(), any(Pageable.class));
+                .findByRequestorIdNot(anyLong(), any(Pageable.class));
         verify(itemRepository, times(1)).findAllByItemRequestIn(anyList());
         verify(itemRequestMapper, times(4))
                 .itemRequestToItemRequestInfoDto(any(ItemRequest.class));
@@ -479,7 +479,7 @@ public class ItemRequestServiceTest {
     @DisplayName("getSeveralItemRequestsPaginated_whenNoItemRequests_thenEmptyListReturned")
     public void getSeveralItemRequestsPaginated_whenNoItemRequests_thenEmptyListReturned() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
-        when(itemRequestRepository.findAllWithoutRequestor(anyLong(), any(Pageable.class)))
+        when(itemRequestRepository.findByRequestorIdNot(anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(Collections.emptyList()));
 
         List<ItemRequestInfoDto> itemRequestInfoDtos = itemRequestService.getSeveralItemRequestsPaginated(
@@ -489,7 +489,7 @@ public class ItemRequestServiceTest {
         assertTrue(itemRequestInfoDtos.isEmpty());
         verify(userRepository, times(1)).findById(anyLong());
         verify(itemRequestRepository, times(1))
-                .findAllWithoutRequestor(anyLong(), any(Pageable.class));
+                .findByRequestorIdNot(anyLong(), any(Pageable.class));
         verify(itemRepository, never()).findAllByItemRequestIn(anyList());
         verify(itemRequestMapper, never()).itemRequestToItemRequestInfoDto(any(ItemRequest.class));
         verify(itemMapper, never()).itemToItemRequestInfoDtoItemDto(any(Item.class));
@@ -505,7 +505,7 @@ public class ItemRequestServiceTest {
 
         assertEquals("User with id 999 not found", notFoundException.getMessage());
         verify(userRepository, times(1)).findById(anyLong());
-        verify(itemRequestRepository, never()).findAllWithoutRequestor(anyLong(), any(Pageable.class));
+        verify(itemRequestRepository, never()).findByRequestorIdNot(anyLong(), any(Pageable.class));
         verify(itemRepository, never()).findAllByItemRequestIn(anyList());
         verify(itemRequestMapper, never()).itemRequestToItemRequestInfoDto(any(ItemRequest.class));
         verify(itemMapper, never()).itemToItemRequestInfoDtoItemDto(any(Item.class));

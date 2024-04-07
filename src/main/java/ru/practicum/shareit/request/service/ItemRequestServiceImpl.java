@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -34,6 +35,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRequestMapper itemRequestMapper;
 
     @Override
+    @Transactional
     public ItemRequestDto createItemRequest(ItemRequest itemRequest, Long requestorId) {
         User requester = userRepository.findById(requestorId).orElseThrow(() -> {
             log.warn("User with id {} not found", requestorId);
@@ -45,6 +47,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemRequestInfoDto> getAllItemRequestsByRequestor(Long requestorId) {
         User requester = userRepository.findById(requestorId).orElseThrow(() -> {
             log.warn("User with id {} not found", requestorId);
@@ -82,6 +85,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemRequestInfoDto> getSeveralItemRequestsPaginated(int from, int size, Long requestorId) {
         userRepository.findById(requestorId).orElseThrow(() -> {
             log.warn("User with id {} not found", requestorId);
@@ -89,7 +93,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         });
         log.debug("User with id = {} found", requestorId);
         ShareItPageRequest pageRequest = new ShareItPageRequest(from, size, Sort.by("created").descending());
-        Page<ItemRequest> itemRequestPage = itemRequestRepository.findAllWithoutRequestor(requestorId, pageRequest);
+        Page<ItemRequest> itemRequestPage = itemRequestRepository.findByRequestorIdNot(requestorId, pageRequest);
         if (itemRequestPage.isEmpty()) {
             log.warn("Item requests not found");
             return Collections.emptyList();
@@ -122,6 +126,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ItemRequestInfoDto getItemRequestById(Long requestId, Long ownerId) {
         userRepository.findById(ownerId).orElseThrow(() -> {
             log.warn("User with id {} not found", ownerId);
