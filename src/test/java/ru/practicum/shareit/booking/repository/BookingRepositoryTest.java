@@ -62,7 +62,6 @@ public class BookingRepositoryTest {
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(2L, pageRequest);
 
         assertNotNull(bookingPage);
-        assertFalse(bookingPage.isEmpty());
         assertEquals(1, bookingPage.getContent().size());
         assertEquals(booking, bookingPage.getContent().get(0));
     }
