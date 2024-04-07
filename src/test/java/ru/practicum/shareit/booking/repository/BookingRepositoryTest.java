@@ -51,7 +51,7 @@ public class BookingRepositoryTest {
     }
 
     @Test
-    @DisplayName("searchItems_whenInvoked_thenPageOfItemsReturned")
+    @DisplayName("findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc_whenInvoked_thenPageOfBookingsReturned")
     void findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc_whenInvoked_thenPageOfBookingsReturned() {
         Booking booking = Booking.builder().status(BookingStatus.WAITING).start(LocalDateTime.now().minusDays(1))
                 .end(LocalDateTime.now().plusDays(1)).booker(user2).item(item1).build();
