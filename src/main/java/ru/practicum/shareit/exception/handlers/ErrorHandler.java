@@ -2,6 +2,7 @@ package ru.practicum.shareit.exception.handlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,9 +21,9 @@ public class ErrorHandler {
         return new ErrorResponse("Object not found", exception.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({ConstraintViolationException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationException(final ConstraintViolationException exception) {
+    public ErrorResponse handleConstraintViolationException(final Exception exception) {
         log.warn("Validation error. {}", exception.getMessage());
         return new ErrorResponse("Validation error", exception.getMessage());
     }

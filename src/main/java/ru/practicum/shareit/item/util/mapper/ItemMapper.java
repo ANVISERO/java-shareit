@@ -1,11 +1,14 @@
 package ru.practicum.shareit.item.util.mapper;
 
-import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dto.ItemRequestInfoDto;
 
-@UtilityClass
+@Component
 public class ItemMapper {
+
     public Item itemDtoToItem(ItemDto itemDto) {
         return Item.builder()
                 .id(itemDto.getId())
@@ -21,6 +24,16 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getItemRequest() == null ? null : item.getItemRequest().getId())
+                .build();
+    }
+
+    public ItemInfoDto itemToItemInfoDto(Item item) {
+        return ItemInfoDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
                 .build();
     }
 
@@ -31,6 +44,16 @@ public class ItemMapper {
                 .description(item.getDescription() != null ? item.getDescription() : existingItem.getDescription())
                 .available(item.getAvailable() != null ? item.getAvailable() : existingItem.getAvailable())
                 .owner(existingItem.getOwner())
+                .build();
+    }
+
+    public ItemRequestInfoDto.ItemDto itemToItemRequestInfoDtoItemDto(Item item) {
+        return ItemRequestInfoDto.ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(item.getItemRequest() == null ? null : item.getItemRequest().getId())
                 .build();
     }
 }
