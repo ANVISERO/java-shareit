@@ -7,14 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.util.ShareItPageRequest;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,13 +39,13 @@ public class ItemRepositoryTest {
     @AfterEach
     void clearDatabase() {
         itemRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("searchItems_whenInvoked_thenPageOfItemsReturned")
     void searchItems_whenInvoked_thenPageOfItemsReturned() {
         ShareItPageRequest pageRequest = new ShareItPageRequest(0, 2);
-        item1.setId(1L);
 
         Page<Item> itemsPage = itemRepository.searchItems("item", pageRequest);
 

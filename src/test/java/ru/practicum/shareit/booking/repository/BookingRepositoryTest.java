@@ -18,7 +18,6 @@ import ru.practicum.shareit.util.ShareItPageRequest;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 public class BookingRepositoryTest {
@@ -47,6 +46,8 @@ public class BookingRepositoryTest {
     @AfterEach
     void clearDatabase() {
         itemRepository.deleteAll();
+        userRepository.deleteAll();
+        bookingRepository.deleteAll();
     }
 
     @Test
@@ -57,8 +58,8 @@ public class BookingRepositoryTest {
         bookingRepository.save(booking);
         ShareItPageRequest pageRequest = new ShareItPageRequest(0, 2);
 
-        Page<Booking> bookingPage = bookingRepository.
-                findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(2L, pageRequest);
+        Page<Booking> bookingPage = bookingRepository
+                .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(2L, pageRequest);
 
         assertNotNull(bookingPage);
         assertFalse(bookingPage.isEmpty());
