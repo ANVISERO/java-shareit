@@ -30,10 +30,12 @@ public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
+    private final String userHeader = "X-Sharer-User-Id";
+
 
     @PostMapping
     public ItemDto createItem(@Validated({OnCreate.class, Default.class}) @RequestBody ItemDto itemDto,
-                              @RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long userId) {
+                              @RequestHeader(value = userHeader) @Positive @NotNull Long userId) {
         log.debug("POST request received to create a new item {} from user with id = {}", itemDto, userId);
         Item item = itemMapper.itemDtoToItem(itemDto);
         log.debug("The message body converted to an object {}", item);
@@ -41,7 +43,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemInfoDto> getAllUserItems(@RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long userId,
+    public List<ItemInfoDto> getAllUserItems(@RequestHeader(value = userHeader) @Positive @NotNull Long userId,
                                              @RequestParam(name = "from", defaultValue = "0")
                                              @PositiveOrZero int from,
                                              @RequestParam(name = "size", defaultValue = "10")
@@ -52,7 +54,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemInfoDto getItemById(@PathVariable(name = "itemId") @Positive @NotNull Long itemId,
-                                   @RequestHeader(value = "X-Sharer-User-Id") @Positive @NotNull Long userId) {
+                                   @RequestHeader(value = userHeader) @Positive @NotNull Long userId) {
         log.debug("GET request received to get item by id = {} from user with id = {}", itemId, userId);
         return itemService.getItemById(itemId, userId);
     }
@@ -60,7 +62,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@PathVariable(name = "itemId") @Positive @NotNull Long itemId,
                               @Valid @RequestBody ItemDto itemDto,
-                              @RequestHeader(value = "X-Sharer-User-Id") @Positive @NotNull Long ownerId) {
+                              @RequestHeader(value = userHeader) @Positive @NotNull Long ownerId) {
         log.debug("PATCH request received to update item by id = {} " +
                 "from user with id = {}", itemId, ownerId);
         Item item = itemMapper.itemDtoToItem(itemDto);
@@ -79,7 +81,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@Validated({OnCreate.class, Default.class}) @RequestBody CommentDto commentDto,
                                     @PathVariable(name = "itemId") @Positive Long itemId,
-                                    @RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long authorId) {
+                                    @RequestHeader(value = userHeader) @Positive @NotNull Long authorId) {
         log.debug("POST request received to create a new comment {} from user with id = {} and item with id = {}",
                 commentDto, authorId, itemId);
         Comment comment = commentMapper.commentDtoToComment(commentDto);

@@ -48,6 +48,8 @@ public class ItemRequestControllerTest {
     private ItemRequestInfoDto itemRequestInfoDto2;
     private ItemRequestInfoDto.ItemDto itemFromItemRequestInfoDto1;
     private ItemRequestInfoDto.ItemDto itemFromItemRequestInfoDto2;
+    private final String userHeader = "X-Sharer-User-Id";
+
 
     @BeforeEach
     void setUp() {
@@ -77,7 +79,7 @@ public class ItemRequestControllerTest {
 
         mockMvc.perform(post("/requests")
                         .content(objectMapper.writeValueAsString(itemRequestDto1))
-                        .header("X-Sharer-User-Id", user1.getId())
+                        .header(userHeader, user1.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +105,7 @@ public class ItemRequestControllerTest {
         when(itemRequestService.getAllItemRequestsByRequestor(anyLong())).thenReturn(itemRequestInfoDtos);
 
         mockMvc.perform(get("/requests")
-                        .header("X-Sharer-User-Id", user1.getId())
+                        .header(userHeader, user1.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -137,7 +139,7 @@ public class ItemRequestControllerTest {
         mockMvc.perform(get("/requests/all")
                         .requestAttr("from", 2)
                         .requestAttr("size", 2)
-                        .header("X-Sharer-User-Id", user1.getId())
+                        .header(userHeader, user1.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -167,7 +169,7 @@ public class ItemRequestControllerTest {
                 .thenReturn(itemRequestInfoDto1);
 
         mockMvc.perform(get("/requests/{requestId}", 1L)
-                        .header("X-Sharer-User-Id", user1.getId())
+                        .header(userHeader, user1.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

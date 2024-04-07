@@ -26,11 +26,12 @@ import java.util.List;
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
     private final ItemRequestMapper itemRequestMapper;
+    private final String userHeader = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemRequestDto createItemRequest(@Validated({OnCreate.class, Default.class}) @RequestBody
                                             ItemRequestDto itemRequestDto,
-                                            @RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long requestorId) {
+                                            @RequestHeader(value = userHeader) @Positive @NotNull Long requestorId) {
         log.debug("POST request received to create a new item's request {} from user with id = {}",
                 itemRequestDto, requestorId);
         ItemRequest itemRequest = itemRequestMapper.itemRequestDtoToItemRequest(itemRequestDto);
@@ -39,7 +40,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequestInfoDto> getAllItemRequestsByRequestor(@RequestHeader("X-Sharer-User-Id") @Positive @NotNull
+    public List<ItemRequestInfoDto> getAllItemRequestsByRequestor(@RequestHeader(value = userHeader) @Positive @NotNull
                                                                   Long requestorId) {
         log.debug("GET request received to get all items' requests of the user with id = {}", requestorId);
         return itemRequestService.getAllItemRequestsByRequestor(requestorId);
@@ -49,7 +50,7 @@ public class ItemRequestController {
     public List<ItemRequestInfoDto> getSeveralItemRequestsPaginated(
             @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(name = "size", defaultValue = "10") @Positive int size,
-            @RequestHeader("X-Sharer-User-Id") @Positive @NotNull Long requestorId) {
+            @RequestHeader(value = userHeader) @Positive @NotNull Long requestorId) {
         log.debug("GET request received from user with id = {} to get {} items' requests beginning with {} ",
                 requestorId, size, from);
         return itemRequestService.getSeveralItemRequestsPaginated(from, size, requestorId);
@@ -57,8 +58,8 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ItemRequestInfoDto getItemRequestById(@PathVariable(name = "requestId") @Positive Long requestId,
-                                             @RequestHeader(value = "X-Sharer-User-Id") @Positive @NotNull
-                                             Long ownerId) {
+                                                 @RequestHeader(value = userHeader) @Positive @NotNull
+                                                 Long ownerId) {
         log.debug("GET request received to get items' request by id = {} from user with id = {}", requestId, ownerId);
         return itemRequestService.getItemRequestById(requestId, ownerId);
     }

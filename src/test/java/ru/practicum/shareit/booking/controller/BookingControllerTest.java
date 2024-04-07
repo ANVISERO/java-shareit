@@ -55,6 +55,7 @@ public class BookingControllerTest {
     Booking booking2;
     BookingDto bookingDto1;
     BookingDto bookingDto2;
+    private final String userHeader = "X-Sharer-User-Id";
 
     @BeforeEach
     void setUp() {
@@ -93,7 +94,7 @@ public class BookingControllerTest {
 
         mockMvc.perform(post("/bookings")
                         .content(objectMapper.writeValueAsString(bookingDto1))
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -124,7 +125,7 @@ public class BookingControllerTest {
 
         mockMvc.perform(patch("/bookings/{bookingId}", 1L)
                         .param("approved", Boolean.TRUE.toString())
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -152,7 +153,7 @@ public class BookingControllerTest {
         when(bookingService.getBookingById(anyLong(), anyLong())).thenReturn(bookingDto1);
 
         mockMvc.perform(get("/bookings/{bookingId}", 1L)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -186,7 +187,7 @@ public class BookingControllerTest {
                         .param("state", BookingStatus.APPROVED.toString())
                         .requestAttr("from", 2)
                         .requestAttr("size", 2)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -230,7 +231,7 @@ public class BookingControllerTest {
                         .param("state", BookingStatus.APPROVED.toString())
                         .requestAttr("from", 2)
                         .requestAttr("size", 2)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -268,7 +269,7 @@ public class BookingControllerTest {
                         .param("state", "XOXO")
                         .requestAttr("from", 2)
                         .requestAttr("size", 2)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

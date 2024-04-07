@@ -58,6 +58,8 @@ public class ItemControllerTest {
     CommentDto commentDto1;
     CommentDto commentDto2;
     ItemInfoDto itemInfoDto1;
+    private final String userHeader = "X-Sharer-User-Id";
+
 
     @BeforeEach
     void setUp() {
@@ -97,7 +99,7 @@ public class ItemControllerTest {
 
         mockMvc.perform(post("/items")
                         .content(objectMapper.writeValueAsString(itemDto1))
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -126,7 +128,7 @@ public class ItemControllerTest {
         when(itemService.getAllUserItems(anyLong(), anyInt(), anyInt())).thenReturn(itemInfoDtos);
 
         mockMvc.perform(get("/items")
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .requestAttr("from", 2)
                         .requestAttr("size", 2)
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -161,7 +163,7 @@ public class ItemControllerTest {
         when(itemService.getItemById(anyLong(), anyLong())).thenReturn(itemInfoDto1);
 
         mockMvc.perform(get("/items/{itemId}", 1L)
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -191,7 +193,7 @@ public class ItemControllerTest {
 
         mockMvc.perform(patch("/items/{itemId}", 1L)
                         .content(objectMapper.writeValueAsString(itemDtoUpdates))
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -247,7 +249,7 @@ public class ItemControllerTest {
 
         mockMvc.perform(post("/items/{itemId}/comment", 1L)
                         .content(objectMapper.writeValueAsString(commentDto1))
-                        .header("X-Sharer-User-Id", 1L)
+                        .header(userHeader, 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
