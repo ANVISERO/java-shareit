@@ -56,7 +56,7 @@ public class BookingRepositoryTest {
         Booking booking = Booking.builder().status(BookingStatus.WAITING).start(LocalDateTime.now().minusDays(1))
                 .end(LocalDateTime.now().plusDays(1)).booker(user2).item(item1).build();
         bookingRepository.save(booking);
-        ShareItPageRequest pageRequest = new ShareItPageRequest(0, 2);
+        ShareItPageRequest pageRequest = new ShareItPageRequest(0, 1);
 
         Page<Booking> bookingPage = bookingRepository
                 .findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(2L, pageRequest);
